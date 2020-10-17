@@ -39,7 +39,7 @@ include("nav.php");
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="dataNascimentoSpan">Data de Nascimento</span>
                             </div>
-                            <input type="date" class="form-control" placeholder="" id="dataNascimento" name="dataNascimento" aria-describedby="dataNascimentoSpan">
+                            <input type="date" min="1900-01-01" max="2030-12-31" data-dateformat="dd/mm/yy" class="form-control" placeholder="" id="dataNascimento" name="dataNascimento" aria-describedby="dataNascimentoSpan">
                         </div>
                     </div>
                     <div class="col">
@@ -59,35 +59,41 @@ include("nav.php");
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="cpfSpan">CPF</span>
                             </div>
-                            <input type="text" class="form-control"  id="cpf" name="cpf" aria-describedby="cpfSpan">
+                            <input type="text" class="form-control" id="cpf" name="cpf" aria-describedby="cpfSpan">
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"><button type="button" class="btn btn-primary">SOLICITAR HORÁRIOS</button></div>
+                    <div class="col"><button type="button" class="btn btn-primary" id="btnGravar" name="btnGravar">SOLICITAR HORÁRIOS</button></div>
                 </div>
             </form>
         </div>
 
 
         <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js" crossorigin="anonymous"></script>
-    
-        
+
+        <script src="bussines.js" type="text/javascript"></script>
+
+
     </body>
 </div>
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-        $("#cpf").mask("999.999.999-99");  
+        $("#cpf").mask("999.999.999-99");
+        $("#dataNascimeno").mask("99/99/9999");
 
         let url = "https://api.feegow.com/v1/api/patient/list-sources";
         let host = "api.feegow.com/v1";
         let contentType = "application/json";
-        let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmZWVnb3ciLCJhdWQiOiJwdWJsaWNhcGkiLCJpYXQiOiIxNy0wOC0yMDE4IiwibGljZW5zZUlEIjoiMTA1In0.UnUQPWYchqzASfDpVUVyQY0BBW50tSQQfVilVuvFG38";
-        getapi(url, host, contentType, token);
+
+        getapiComoConheceu(url, host, contentType);
+
+        $("#btnGravar").on("click", function() {
+            gravar();
+        });
 
 
         $("#dataNascimento").on("focusout", function() {
@@ -97,44 +103,63 @@ include("nav.php");
             let cpf = $("#cpf").val();
             cpf = cpf.replaceAll(".", "");
             cpf = cpf.replace("-", "");
-            if(TestaCPF(cpf) == false){
+            if (TestaCPF(cpf) == false) {
                 alert("cpf inválido");
+                $("#cpf").val("");
             }
         });
+        $("#nome").on("change", function() {
+            let nome = $("#nome").val();
+            if (allLetter(nome) == false) {
+                $("#nome").val("");
+            };
+        });
+
 
 
     });
 
 
-    async function getapi(url, host, contentType, token) {
+    async function getapiComoConheceu(url, host, contentType) {
 
         let urlApi = url;
         let hostApi = "Host=" + host;
         let contentTypeApi = "Content-Type=" + contentType;
-        let tokenApi = "x-access-token=" + token;
 
-        final_url = urlApi + "?" + hostApi + "&" + contentTypeApi + "&" + tokenApi;
+
+        final_url = urlApi + "?" + hostApi + "&" + contentTypeApi;
         // Storing response 
-        const response = await fetch(final_url);
-        // Storing data in form of JSON 
-        var data = await response.json();
-        console.log(data);
+        recuperaApi(urlApi, hostApi, contentTypeApi,
+            function(data) {
+                var data = JSON.parse(data);
+                for (const [key, value] of Object.entries(data)) {
+                    if (key == 'content') {
+                        arrayProfissional = value;
+                        for (const [key, value] of Object.entries(arrayProfissional)) {
+                            let id = value['origem_id'];
+                            let nome = value['nome_origem'];
+                            if (nome == null) {
+                                nome = "";
+                            }
 
-        for (const [key, value] of Object.entries(data)) {
-            if (key == 'content') {
-                arrayProfissional = value;
-                for (const [key, value] of Object.entries(arrayProfissional)) {
-                    let id = value['origem_id'];
-                    let nome = value['nome_origem'];
-                    if (nome == null) {
-                        nome = "";
+                            var option = $('<option value=' + id + '>' + nome + '</option>');
+                            $("#comoConheceu").append(option);
+
+                        }
                     }
-
-                    var option = $('<option value=' + id + '>' + nome + '</option>');
-                    $("#comoConheceu").append(option);
-
                 }
             }
+        );
+    }
+
+
+    function allLetter(inputtxt) {
+        var letters = /^[A-zÀ-ú]+$/;
+        if (letters.test(inputtxt)) {
+            return true;
+        } else {
+            alert('Please input alphabet characters only');
+            return false;
         }
     }
 
@@ -161,9 +186,12 @@ include("nav.php");
 
     function validaCampoData(campo) {
         var valor = $(campo).val();
+
         let piece = valor.split('-');
         if (piece[0] >= 2020) {
-
+            alert("data inválida");
+            $(campo).val("");
+            return false;
         }
         valor = piece[2] + "/" + piece[1] + "/" + piece[0];
         var validacao = validaData(valor); //Chama a função validaData dentro do gir_script.js
@@ -189,7 +217,7 @@ include("nav.php");
                 erro = true;
         }
         if (erro) {
-            alert("data errada");
+            alert("data inválida");
             return false;
         }
         return true;
@@ -197,60 +225,43 @@ include("nav.php");
 
 
     function gravar() {
-        var portal = $("#portal").val();
-        var orgaoLicitante = $("#orgaoLicitante").val();
-        var participaPregao = $("#participaPregao option:selected").val();
-        var numeroPregao = $("#numeroPregao").val();
-        var dataPregao = $("#dataPregao").val();
-        var horaPregao = $("#horaPregao").val();
-        var oportunidadeCompra = $("#oportunidadeCompra").val();
+        let nome = $("#nome").val();
+        let dataNascimento = $("#dataNascimento").val();
+        let comoConheceu = $("#comoConheceu option:selected").val();
+        let cpf = $("#cpf").val();
+        cpf = cpf.replaceAll(".", "");
+        cpf = cpf.replace("-", "");
+        let url_string = location.href;
+        var url = new URL(url_string);
+        var specialytyId = url.searchParams.get("speciality_id");
+        var profissionalId = url.searchParams.get("professional_id");
 
-
-        if (portal === "") {
-            smartAlert("Atenção", "Selecione um portal !", "error");
-            $("#portal").focus();
+        if (nome === "") {
+            alert("Digite o Nome!");
+            $("#nome").focus();
             return;
         }
 
-        if (orgaoLicitante === "") {
-            smartAlert("Atenção", "Digite o Nome do Orgão Licitante !", "error");
-            $("#orgaoLicitante").focus();
+        if (dataNascimento === "") {
+            alert("Digite a data de nascimento!");
+            $("#dataNascimento").focus();
             return;
         }
 
-        if (participaPregao === "") {
-            smartAlert("Atenção", "Ecolha uma opção do Participar !", "error");
-            $("#participaPregao").focus();
+        if (comoConheceu === "") {
+            alert("Selecione como conheceu!");
+            $("#comoConheceu").focus();
             return;
         }
 
-        if (numeroPregao === "") {
-            smartAlert("Atenção", "Digite o Número do Pregão !", "error");
-            $("#numeroPregao").focus();
+        if (cpf === "") {
+            alert("Digite o cpf!");
+            $("#cpf").focus();
             return;
         }
 
-        if (dataPregao === "") {
-            smartAlert("Atenção", "Digite a Data do Pregão !", "error");
-            $("#dataPregao").focus();
-            return;
-        }
+        gravaAgendamento(nome, dataNascimento, comoConheceu, cpf, specialytyId, profissionalId);
 
-        if (horaPregao === "") {
-            smartAlert("Atenção", "Digite a Hora do Pregão !", "error");
-            $("#horaPregao").focus();
-            return;
-        }
-
-        if (oportunidadeCompra === "") {
-            smartAlert("Atenção", "Digite a Oportunidade de Compra !", "error");
-            $("#oportunidadeCompra").focus();
-            return;
-        }
-
-        var form = $('#formGarimparPregoes')[0];
-        var formData = new FormData(form);
-        gravaPregoes(formData);
     }
 </script>
 
