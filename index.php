@@ -1,5 +1,5 @@
 <?php
-include("nav.php");
+include("components/nav.php");
 ?>
 
 <div>
@@ -39,7 +39,7 @@ include("nav.php");
         <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
-        <script src="bussines.js" type="text/javascript"></script>
+        <script src="sql/bussines.js" type="text/javascript"></script>
 
     </body>
 </div>
@@ -99,6 +99,7 @@ include("nav.php");
         recuperaApiProfissional(urlApi, hostApi, contentTypeApi, idApi,
             function(data) {
                 var data = JSON.parse(data);
+                let contador = 0;
                 for (const [key, value] of Object.entries(data)) {
                     if (key == 'content') {
                         arrayProfissional = value;
@@ -118,9 +119,16 @@ include("nav.php");
                                 crm = "";
                             }
 
+                            let design = "";
+                            contador = parseInt(key);
+                            
+                            if ( contador&1) {
+                                design = "card-design"
+                            }
                             let idEspecialidade = $("#especialidade").val();
-                            var card = $('<div class="col mb-4"><div class="card"><div class="card-body"><h5 class="card-title">' + tratamento + ' ' + nome + '</h5><p class="card-text">CRM : ' + crm + '</p><a href="formulario.php?specialty_id=' + idEspecialidade +'&professional_id=' + idProfissional + '" class="btn btn-primary">AGENDAR</a></div></div></div>');
+                            var card = $('<div class="col mb-4"><div class="card"><div class="card-body ' + design + '"><h5 class="card-title">' + tratamento + ' ' + nome + '</h5><p class="card-text">CRM : ' + crm + '</p><a href="formulario.php?specialty_id=' + idEspecialidade + '&professional_id=' + idProfissional + '" class="btn btn-primary">AGENDAR</a></div></div></div>');
                             $("#card").append(card);
+
 
                         }
                     }

@@ -1,5 +1,5 @@
 <?php
-include("nav.php");
+include("components/nav.php");
 ?>
 
 <div>
@@ -74,7 +74,7 @@ include("nav.php");
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js" crossorigin="anonymous"></script>
 
-        <script src="bussines.js" type="text/javascript"></script>
+        <script src="sql/bussines.js" type="text/javascript"></script>
 
 
     </body>
@@ -154,7 +154,7 @@ include("nav.php");
 
 
     function allLetter(inputtxt) {
-        var letters = /^[A-zÀ-ú]+$/;
+        var letters = /^[a-zà-ú .-]+$/i;
         if (letters.test(inputtxt)) {
             return true;
         } else {
@@ -187,16 +187,30 @@ include("nav.php");
     function validaCampoData(campo) {
         var valor = $(campo).val();
 
-        let piece = valor.split('-');
-        if (piece[0] >= 2020) {
+        if (comparaData(valor) == 1) {
             alert("data inválida");
             $(campo).val("");
             return false;
         }
         valor = piece[2] + "/" + piece[1] + "/" + piece[0];
-        var validacao = validaData(valor); //Chama a função validaData dentro do gir_script.js
+        var validacao = validaData(valor); 
         if (validacao === false) {
             $(campo).val("");
+        }
+    }
+
+    function comparaData(valor){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        if(valor > today){
+            return 1;
+        }else{
+            return 0;
         }
     }
 
@@ -264,5 +278,3 @@ include("nav.php");
 
     }
 </script>
-
-<!-- $url = "https://api.feegow.com/v1/api/specialties/list?Host=api.feegow.com/v1&Content-Type=application/json&x-access-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmZWVnb3ciLCJhdWQiOiJwdWJsaWNhcGkiLCJpYXQiOiIxNy0wOC0yMDE4IiwibGljZW5zZUlEIjoiMTA1In0.UnUQPWYchqzASfDpVUVyQY0BBW50tSQQfVilVuvFG38" -->

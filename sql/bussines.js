@@ -1,6 +1,6 @@
 function recuperaApi(url, host, contentType, callback) {
   $.ajax({
-    url: "sqlscope_connection.php",
+    url: "sql/sqlscope_connection.php",
     dataType: "html",
     type: "post",
     data: {
@@ -17,7 +17,7 @@ function recuperaApi(url, host, contentType, callback) {
 
 function recuperaApiProfissional(url, host, contentType, id, callback) {
   $.ajax({
-    url: "sqlscope_connection.php",
+    url: "sql/sqlscope_connection.php",
     dataType: "html",
     type: "post",
     data: {
@@ -35,7 +35,7 @@ function recuperaApiProfissional(url, host, contentType, id, callback) {
 
 function gravaAgendamento(nome,dataNascimento,comoConheceu,cpf,specialtyId,profissionalId) {
   $.ajax({
-    url: "sqlscope_connection.php",
+    url: "sql/sqlscope_connection.php",
     dataType: "html",
     type: "post",
     data: {
