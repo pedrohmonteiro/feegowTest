@@ -71,7 +71,7 @@ function grava_agendamento()
     $dataNascimento = "'" . $_POST["dataNascimento"] . "'";
     $comoConheceu = "'" . $_POST["comoConheceu"] . "'";
     $cpf = "'" . $_POST["cpf"] . "'";
-    $specialytyId = "'" . $_POST["specialytyId"] . "'";
+    $specialtyId = "'" . $_POST["specialtyId"] . "'";
     $profissionalId = "'" . $_POST["profissionalId"] . "'";
     $dateTime = "'" . date("Y-m-d H:i:s") . "'";
 
@@ -87,8 +87,8 @@ function grava_agendamento()
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "INSERT INTO agendamento (specialyty_id,professional_id,name,cpf,source_id,birthdate,date_time) 
-    VALUES ( $specialytyId, $profissionalId, $nome, $cpf, $comoConheceu, $dataNascimento,$dateTime)";
+    $sql = "INSERT INTO agendamento (specialty_id,professional_id,name,cpf,source_id,birthdate,date_time) 
+    VALUES ( $specialtyId, $profissionalId, $nome, $cpf, $comoConheceu, $dataNascimento,$dateTime)";
 
     print_r($sql);
 

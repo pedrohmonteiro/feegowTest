@@ -233,7 +233,7 @@ include("nav.php");
         cpf = cpf.replace("-", "");
         let url_string = location.href;
         var url = new URL(url_string);
-        var specialytyId = url.searchParams.get("speciality_id");
+        var specialtyId = url.searchParams.get("specialty_id");
         var profissionalId = url.searchParams.get("professional_id");
 
         if (nome === "") {
@@ -260,7 +260,7 @@ include("nav.php");
             return;
         }
 
-        gravaAgendamento(nome, dataNascimento, comoConheceu, cpf, specialytyId, profissionalId);
+        gravaAgendamento(nome, dataNascimento, comoConheceu, cpf, specialtyId, profissionalId);
 
     }
 </script>

@@ -119,7 +119,7 @@ include("nav.php");
                             }
 
                             let idEspecialidade = $("#especialidade").val();
-                            var card = $('<div class="col mb-4"><div class="card"><div class="card-body"><h5 class="card-title">' + tratamento + ' ' + nome + '</h5><p class="card-text">CRM : ' + crm + '</p><a href="formulario.php?speciality_id=' + idEspecialidade +'&professional_id=' + idProfissional + '" class="btn btn-primary">AGENDAR</a></div></div></div>');
+                            var card = $('<div class="col mb-4"><div class="card"><div class="card-body"><h5 class="card-title">' + tratamento + ' ' + nome + '</h5><p class="card-text">CRM : ' + crm + '</p><a href="formulario.php?specialty_id=' + idEspecialidade +'&professional_id=' + idProfissional + '" class="btn btn-primary">AGENDAR</a></div></div></div>');
                             $("#card").append(card);
 
                         }

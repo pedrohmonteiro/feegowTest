@@ -33,7 +33,7 @@ function recuperaApiProfissional(url, host, contentType, id, callback) {
   });
 }
 
-function gravaAgendamento(nome,dataNascimento,comoConheceu,cpf,specialytyId,profissionalId) {
+function gravaAgendamento(nome,dataNascimento,comoConheceu,cpf,specialtyId,profissionalId) {
   $.ajax({
     url: "sqlscope_connection.php",
     dataType: "html",
@@ -44,10 +44,12 @@ function gravaAgendamento(nome,dataNascimento,comoConheceu,cpf,specialytyId,prof
       dataNascimento: dataNascimento,
       comoConheceu: comoConheceu,
       cpf: cpf,
-      specialytyId: specialytyId,
+      specialtyId: specialtyId,
       profissionalId: profissionalId
     },
     success: function (data) {
+      alert("Agendamento concluído com sucesso");
+      $(location).attr('href', 'index.php');
     },
   });
 }
