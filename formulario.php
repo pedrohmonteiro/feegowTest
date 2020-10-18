@@ -13,6 +13,9 @@ include("components/nav.php");
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <!-- jquerry -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <!-- select2 -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
         <!-- index CSS -->
         <link rel="stylesheet" type="text/css" media="screen" href="./css/index.css">
 
@@ -34,7 +37,7 @@ include("components/nav.php");
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="dataNascimentoSpan">Data de Nascimento</span>
@@ -42,25 +45,26 @@ include("components/nav.php");
                             <input type="date" min="1900-01-01" max="2030-12-31" data-dateformat="dd/mm/yy" class="form-control" placeholder="" id="dataNascimento" name="dataNascimento" aria-describedby="dataNascimentoSpan">
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="comoConheceu">Como Conheceu</label>
-                            </div>
-                            <select class="custom-select" id="comoConheceu" name="comoConheceu">
-                                <option selected></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
+                    <div class="col-sm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="cpfSpan">CPF</span>
                             </div>
                             <input type="text" class="form-control" id="cpf" name="cpf" aria-describedby="cpfSpan">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="comoConheceu">Como Conheceu</label>
+                            </div>
+                            <select class="custom-select select" id="comoConheceu" name="comoConheceu">
+                                <option selected></option>
+                            </select>
+                        </div>
+
                     </div>
                 </div>
                 <div class="row">
@@ -82,6 +86,7 @@ include("components/nav.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+        $('select').select2();
         $("#cpf").mask("999.999.999-99");
         $("#dataNascimeno").mask("99/99/9999");
 
@@ -193,23 +198,23 @@ include("components/nav.php");
             return false;
         }
         valor = piece[2] + "/" + piece[1] + "/" + piece[0];
-        var validacao = validaData(valor); 
+        var validacao = validaData(valor);
         if (validacao === false) {
             $(campo).val("");
         }
     }
 
-    function comparaData(valor){
+    function comparaData(valor) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
 
-        if(valor > today){
+        if (valor > today) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }

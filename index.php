@@ -13,26 +13,35 @@ include("components/nav.php");
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <!-- jquerry -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <!-- select2 -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
         <!-- index CSS -->
         <link rel="stylesheet" type="text/css" media="screen" href="./css/index.css">
+
 
         <title>Hello, world!</title>
     </head>
 
     <body>
         <div class="container">
-            <input id="codigo" name="codigo" type="text" class="hidden" hidden value="">
+            <div class="row">
+                <div class="col-sm">
+                    <input id="codigo" name="codigo" type="text" class="hidden" hidden value="">
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="especialidade">Especialidades</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="especialidade">Especialidades</label>
+                        </div>
+                        <select class="custom-select" id="especialidade" name="especialidade">
+                            <option selected> </option>
+                        </select>
+                    </div>
+                    <div class="row row-cols-1 row-cols-md-4" id="card">
+                    </div>
                 </div>
-                <select class="custom-select" id="especialidade" name="especialidade">
-                    <option selected></option>
-                </select>
             </div>
-            <div class="row row-cols-1 row-cols-md-4" id="card">
-            </div>
+
         </div>
 
 
@@ -46,6 +55,11 @@ include("components/nav.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+
+
+        $('.custom-select').select2();
+
+
 
         let host = "api.feegow.com/v1";
         let contentType = "application/json";
@@ -121,8 +135,8 @@ include("components/nav.php");
 
                             let design = "";
                             contador = parseInt(key);
-                            
-                            if ( contador&1) {
+
+                            if (contador & 1) {
                                 design = "card-design"
                             }
                             let idEspecialidade = $("#especialidade").val();
