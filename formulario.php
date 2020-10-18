@@ -277,6 +277,7 @@ include("components/nav.php");
 
     // função para enviar os dados para o banco
     function gravar() {
+        
         let nome = $("#nome").val();
         let dataNascimento = $("#dataNascimento").val();
         let comoConheceu = $("#comoConheceu option:selected").val();
