@@ -13,7 +13,7 @@ if ($funcao == 'grava_agendamento') {
     call_user_func($funcao);
 }
 
-
+// função para pegar dados da api
 function get_data_from_api()
 {
     $url = $_POST["url"];
@@ -39,6 +39,7 @@ function get_data_from_api()
     return;
 }
 
+// função para pegar dados do profissional da api
 function get_data_from_api_profissional()
 {
     $url = $_POST["url"];
@@ -65,6 +66,7 @@ function get_data_from_api_profissional()
     return;
 }
 
+// função para gravar dados no banco
 function grava_agendamento()
 {
     $nome = "'" . $_POST["nome"] . "'";

@@ -1,4 +1,5 @@
 <?php
+//importação da navbar 
 include("components/nav.php");
 ?>
 
@@ -20,34 +21,40 @@ include("components/nav.php");
         <link rel="stylesheet" type="text/css" media="screen" href="./css/index.css">
 
 
-        <title>Hello, world!</title>
+        <title>Agendamento</title>
     </head>
 
     <body>
         <div class="container">
+
             <div class="row">
+
                 <div class="col-sm">
-                    <input id="codigo" name="codigo" type="text" class="hidden" hidden value="">
 
                     <div class="input-group mb-3">
+
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="especialidade">Especialidades</label>
                         </div>
+
                         <select class="custom-select" id="especialidade" name="especialidade">
                             <option selected> </option>
                         </select>
+
                     </div>
+
                     <div class="row row-cols-1 row-cols-md-4" id="card">
                     </div>
+
                 </div>
+
             </div>
 
         </div>
 
-
         <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
+        <!-- bussines -->
         <script src="sql/bussines.js" type="text/javascript"></script>
 
     </body>
@@ -55,11 +62,7 @@ include("components/nav.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
-
-
         $('.custom-select').select2();
-
-
 
         let host = "api.feegow.com/v1";
         let contentType = "application/json";
@@ -73,6 +76,7 @@ include("components/nav.php");
         });
     });
 
+    // função para pegar os epecialistas passando a url - host - content type
     async function getapiEspecialidade(url, host, contentType) {
 
         let urlApi = url;
@@ -102,6 +106,8 @@ include("components/nav.php");
             }
         );
     }
+
+    // função para pegar os profissionais pela especialidade escolhida passando a url - host - content type - id da especialidade
     async function getapiProfissional(url, host, contentType, id) {
 
         let urlApi = url;

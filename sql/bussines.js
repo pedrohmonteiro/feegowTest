@@ -48,8 +48,11 @@ function gravaAgendamento(nome,dataNascimento,comoConheceu,cpf,specialtyId,profi
       profissionalId: profissionalId
     },
     success: function (data) {
-      alert("Agendamento concluído com sucesso");
-      $(location).attr('href', 'index.php');
+    swal({
+      text: "Solicitação concluída com sucesso",
+      icon: "success",
+    });
+    setTimeout(function() { window.location.href ='index.php'; }, 3000 );
     },
   });
 }

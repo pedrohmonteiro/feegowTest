@@ -16,18 +16,23 @@ include("components/nav.php");
         <!-- select2 -->
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+        <!-- sweetalert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <!-- index CSS -->
         <link rel="stylesheet" type="text/css" media="screen" href="./css/index.css">
 
 
-        <title>Hello, world!</title>
+        <title>Agendamento</title>
     </head>
 
     <body>
         <div class="container">
+
             <form>
+
                 <div class="row">
-                    <div class="col">
+
+                    <div class="col-sm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="nomeSpan">Nome Completo</span>
@@ -35,16 +40,20 @@ include("components/nav.php");
                             <input type="text" class="form-control" placeholder="" id="nome" aria-describedby="nomeSpan">
                         </div>
                     </div>
+
                 </div>
+
                 <div class="row">
+
                     <div class="col-sm">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="dataNascimentoSpan">Data de Nascimento</span>
                             </div>
-                            <input type="date" min="1900-01-01" max="2030-12-31" data-dateformat="dd/mm/yy" class="form-control" placeholder="" id="dataNascimento" name="dataNascimento" aria-describedby="dataNascimentoSpan">
+                            <input type="date" min="1900-01-01" max="2030-12-31" data-dateformat="dd/mm/yyyy" class="form-control" placeholder="" id="dataNascimento" name="dataNascimento" aria-describedby="dataNascimentoSpan">
                         </div>
                     </div>
+
                     <div class="col-sm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -53,8 +62,11 @@ include("components/nav.php");
                             <input type="text" class="form-control" id="cpf" name="cpf" aria-describedby="cpfSpan">
                         </div>
                     </div>
+
                 </div>
+
                 <div class="row">
+
                     <div class="col-sm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -64,18 +76,21 @@ include("components/nav.php");
                                 <option selected></option>
                             </select>
                         </div>
-
                     </div>
+
                 </div>
+
                 <div class="row">
                     <div class="col"><button type="button" class="btn btn-primary" id="btnGravar" name="btnGravar">SOLICITAR HORÁRIOS</button></div>
                 </div>
+
             </form>
+
         </div>
 
-
         <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js" crossorigin="anonymous"></script>
 
         <script src="sql/bussines.js" type="text/javascript"></script>
@@ -86,9 +101,10 @@ include("components/nav.php");
 
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {
+
         $('select').select2();
+        //mascara do cpf
         $("#cpf").mask("999.999.999-99");
-        $("#dataNascimeno").mask("99/99/9999");
 
         let url = "https://api.feegow.com/v1/api/patient/list-sources";
         let host = "api.feegow.com/v1";
@@ -104,15 +120,19 @@ include("components/nav.php");
         $("#dataNascimento").on("focusout", function() {
             validaCampoData("#dataNascimento");
         });
+
         $("#cpf").on("change", function() {
             let cpf = $("#cpf").val();
             cpf = cpf.replaceAll(".", "");
             cpf = cpf.replace("-", "");
             if (TestaCPF(cpf) == false) {
-                alert("cpf inválido");
+                swal("CPF inválido", {
+                    dangerMode: true,
+                });
                 $("#cpf").val("");
             }
         });
+
         $("#nome").on("change", function() {
             let nome = $("#nome").val();
             if (allLetter(nome) == false) {
@@ -124,7 +144,7 @@ include("components/nav.php");
 
     });
 
-
+    // função para pegar o como conheceu passando a url - host - content type
     async function getapiComoConheceu(url, host, contentType) {
 
         let urlApi = url;
@@ -136,10 +156,13 @@ include("components/nav.php");
         // Storing response 
         recuperaApi(urlApi, hostApi, contentTypeApi,
             function(data) {
+
                 var data = JSON.parse(data);
+
                 for (const [key, value] of Object.entries(data)) {
                     if (key == 'content') {
                         arrayProfissional = value;
+
                         for (const [key, value] of Object.entries(arrayProfissional)) {
                             let id = value['origem_id'];
                             let nome = value['nome_origem'];
@@ -157,17 +180,20 @@ include("components/nav.php");
         );
     }
 
-
+    // função para verificar se o nome contén somente caracteres corretos
     function allLetter(inputtxt) {
         var letters = /^[a-zà-ú .-]+$/i;
         if (letters.test(inputtxt)) {
             return true;
         } else {
-            alert('Please input alphabet characters only');
+            swal("Por favor entre somente com caracteres alfabéticos", {
+                dangerMode: true,
+            });
             return false;
         }
     }
 
+    // função para verificar se o cpf esta correto
     function TestaCPF(strCPF) {
         var Soma;
         var Resto;
@@ -189,11 +215,14 @@ include("components/nav.php");
         return true;
     }
 
+    // função para validar a data 
     function validaCampoData(campo) {
         var valor = $(campo).val();
 
         if (comparaData(valor) == 1) {
-            alert("data inválida");
+            swal("Data inválida", {
+                dangerMode: true,
+            });
             $(campo).val("");
             return false;
         }
@@ -204,6 +233,7 @@ include("components/nav.php");
         }
     }
 
+    // função para verificar se a data é maior ou menor que hj
     function comparaData(valor) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -219,6 +249,7 @@ include("components/nav.php");
         }
     }
 
+    // função para verificar se a data conten os dados corretos
     function validaData(valor) {
         var date = valor;
         var ardt = new Array;
@@ -236,13 +267,15 @@ include("components/nav.php");
                 erro = true;
         }
         if (erro) {
-            alert("data inválida");
+            swal("Data inválida", {
+                dangerMode: true,
+            });
             return false;
         }
         return true;
     }
 
-
+    // função para enviar os dados para o banco
     function gravar() {
         let nome = $("#nome").val();
         let dataNascimento = $("#dataNascimento").val();
